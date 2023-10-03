@@ -1,0 +1,39 @@
+version: "3.3"
+
+# https://hub.docker.com/r/naisy/donkeycar-pc
+
+
+services:
+
+  server_donkeycar:
+    build:
+      context: ..
+      dockerfile: server.Dockerfile
+    image: autobot:server_donkey_car
+    runtime: nvidia
+    container_name: server_donkeycar
+    restart: "always"
+    network_mode: host
+    privileged: true
+    tty: true
+    stdin_open: true
+    environment:
+      - DISPLAY=$DISPLAY
+      - QT_GRAPHICSSYSTEM=native
+      - QT_X11_NO_MITSHM=1
+      - XAUTHORITY=/tmp/.XAuthority
+    user: ubuntu
+    volumes:
+      # X11 & Cam
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /tmp/argus_socket:/tmp/argus_socket:rw
+      - /tmp/nvscsock:/tmp/nvscsock:rw
+      - /etc/enctune.conf:/etc/enctune.conf
+      - /etc/localtime:/etc/localtime:ro
+      - /dev/:/dev/
+      - /home/$USER/.Xauthority/:/tmp/.XAuthority
+      #----------
+      - ./robot:/home/ubuntu/donkey_car
+    working_dir: /home/ubuntu/donkey_car
+    entrypoint: 'bash'
+    #entrypoint: './UI_entrypoint.sh'
