@@ -35,7 +35,7 @@ COMPOSE_DOCKER_CLI_BUILD=1 \
 DOCKER_BUILDKIT=1 \
 HOSTNAME=${HOSTNAME} \
 DISPLAY=${DISPLAY} \
-docker-compose -p "${docker_stack_name}" up -d --build
+docker-compose -p "${docker_stack_name}" -f robot.docker-compose.yaml up -d --build
 
 printf '
 ==============================================
