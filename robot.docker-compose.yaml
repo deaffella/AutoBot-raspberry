@@ -1,0 +1,26 @@
+version: "3.3"
+
+services:
+
+  donkey_car:
+    build:
+      context: ./robot
+      dockerfile: robot.Dockerfile
+    container_name: donkey_car
+    image: autobot:robot_pi4
+    restart: "always"
+    network_mode: host
+    privileged: true
+    tty: true
+    stdin_open: true
+    environment:
+      - DISPLAY=$DISPLAY
+      - WEB_CONTROL_PORT=9002
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw    # X11
+      #----------
+      - ./robot:/robot
+      - /dev:/dev                           # [обязательно] - для проброса USB камеры
+    working_dir: /robot
+    entrypoint: 'bash'
+    #entrypoint: './Autobot_Platform.py'
